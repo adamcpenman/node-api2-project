@@ -97,6 +97,42 @@ server.delete("/api/posts/:id", (req,res) =>{
         })
 })
 
+//find comments
+server.get("/api/posts/:id/comments", (req, res) => {
+    console.log(res.params, "Find comments")
+    db.findPostComments(req.params.id)
+        .then(data => {
+            res.json(data)
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(500).json({
+                message: "Nah, girl"
+            })
+        })
+})
+
+server.post("/api/posts/:id/comments", (req, res) => {
+    if (!req.body.text || !req.body.post){
+        return res.status(400).json({
+            message: "Need Text and post values"
+        })
+    }
+    const body = {
+        text: req.body.text,
+        post: req.body.post
+    }
+    db.insertComment(req.params.id, body)
+        .then(data => {
+            res.status(201).json(data)
+        })
+        .catch(error => {
+            req.status(500).json({
+                message: "Could not create"
+            })
+        })
+})
+
 server.listen(4000, () => {
   console.log("Server Running on http://localhost:4000")
 })
