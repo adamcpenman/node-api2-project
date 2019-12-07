@@ -78,6 +78,25 @@ server.put("/api/posts/:id", (req, res) => {
         })
 })
 
+//delete
+server.delete("/api/posts/:id", (req,res) =>{ 
+    db.remove(req.params.id)
+        .then(count => {
+            if (count > 0) {
+                res.status(200).json({ message: "BYE FOREVER"})
+            } else {
+                res.status(204).json({ message: "I dont know her"
+                })
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(500).json({
+                message: "Error, WTF?!"
+            })
+        })
+})
+
 server.listen(4000, () => {
   console.log("Server Running on http://localhost:4000")
 })
